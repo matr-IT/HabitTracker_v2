@@ -142,11 +142,13 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 CACHE_ENABLED = True
 
+REDIS_HOST = os.getenv("REDIS_HOST")
+
 if CACHE_ENABLED:
     CACHES = {
         "default": {
             "BACKEND": "django.core.cache.backends.redis.RedisCache",
-            "LOCATION": os.getenv("REDIS_URL", "redis://127.0.0.1:6379/1"),
+            "LOCATION": f"redis://{REDIS_HOST}:6379/1",
         }
     }
 
@@ -156,13 +158,13 @@ if CACHE_ENABLED:
     CACHE_TTL = 60
     CACHE_MIDDLEWARE_SECONDS = 60
     CACHE_MIDDLEWARE_KEY_PREFIX = "mms"
-    REDIS_URL = "redis://127.0.0.1:6379/1"
+    REDIS_URL = f"redis://{REDIS_HOST}:6379/1"
 
 
-CELERY_BROKER_URL = 'redis://localhost:6379' # Например, Redis, который по умолчанию работает на порту 6379
+CELERY_BROKER_URL = f"redis://{REDIS_HOST}:6379" # Например, Redis, который по умолчанию работает на порту 6379
 
 # URL-адрес брокера результатов, также Redis
-CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = f"redis://{REDIS_HOST}:6379"
 
 # Часовой пояс для работы Celery
 CELERY_TIMEZONE = "Europe/Moscow"
