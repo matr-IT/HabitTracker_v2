@@ -1,0 +1,70 @@
+services:
+   db:
+     image: postgres:17
+     container_name: db
+     restart: always
+     env_file:
+       - ./.env
+     volumes:
+       - pgdata:/var/lib/postgresql/data
+     environment:
+       POSTGRES_DB: ${POSTGRES_NAME}
+       POSTGRES_USER: ${POSTGRES_USER}
+       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+     healthcheck:
+       test: [ "CMD-SHELL", "pg_isready -U postgres -d postgres" ]
+       interval: 10s
+       timeout: 5s
+       retries: 5
+       start_period: 10s
+
+
+   web:
+     build:
+       context: .
+       dockerfile: Dockerfile
+     container_name: web
+     command: >
+       sh -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+     ports:
+       - "8000:8000"
+     environment:
+       POSTGRES_HOST: db
+       REDIS_HOST: redis
+     env_file:
+       - ./.env
+     depends_on:
+       - db
+       - redis
+       - celery
+       - celery-beat
+     volumes:
+       - .:/app
+
+   redis:
+        image: redis:latest
+        container_name: redis
+
+   celery:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: celery
+        command: celery -A config worker --loglevel=info
+        depends_on:
+          - db
+          - redis
+
+
+   celery-beat:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: celery-beat
+        command: celery -A config beat --loglevel=info
+        depends_on:
+          - db
+          - redis
+
+volumes:
+  pgdata:
