@@ -44,10 +44,13 @@ REST_FRAMEWORK = {
     ]
 }
 
-REST_FRAMEWORK.setdefault('DEFAULT_AUTHENTICATION_CLASSES', [
-    'rest_framework_simplejwt.authentication.JWTAuthentication',
-    'rest_framework.authentication.SessionAuthentication',
-])
+REST_FRAMEWORK.setdefault(
+    'DEFAULT_AUTHENTICATION_CLASSES',
+    [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+)
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
@@ -66,7 +69,7 @@ CORS_ALLOWED_ORIGINS = [
 
 CSRF_TRUSTED_ORIGINS = [
     "https://read-and-write.example.com",
-    "https://read-and-write.example.com",  #  Замените на адрес вашего фронтенд-сервера
+    "https://read-and-write.example.com",  # Замените на адрес вашего фронтенд-сервера
     # и добавьте адрес бэкенд-сервера
 ]
 
@@ -120,7 +123,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-
 LANGUAGE_CODE = "ru"
 
 TIME_ZONE = "Europe/Moscow"
@@ -161,7 +163,7 @@ if CACHE_ENABLED:
     REDIS_URL = f"redis://{REDIS_HOST}:6379/1"
 
 
-CELERY_BROKER_URL = f"redis://{REDIS_HOST}:6379" # Например, Redis, который по умолчанию работает на порту 6379
+CELERY_BROKER_URL = f"redis://{REDIS_HOST}:6379"  # Например, Redis, который по умолчанию работает на порту 6379
 
 # URL-адрес брокера результатов, также Redis
 CELERY_RESULT_BACKEND = f"redis://{REDIS_HOST}:6379"

@@ -1,16 +1,10 @@
-from rest_framework.generics import (
-    CreateAPIView,
-    DestroyAPIView,
-    RetrieveAPIView,
-    UpdateAPIView,
-)
-
+from rest_framework.generics import (CreateAPIView, DestroyAPIView,
+                                     RetrieveAPIView, UpdateAPIView)
 from rest_framework.permissions import AllowAny
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 from users.models import User
-from users.serializers import UserSerializer, MyTokenObtainPairSerializer
-
-from rest_framework_simplejwt.views import TokenObtainPairView
+from users.serializers import MyTokenObtainPairSerializer, UserSerializer
 
 
 class MyTokenObtainPairView(TokenObtainPairView):

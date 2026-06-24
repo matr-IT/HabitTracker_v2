@@ -1,11 +1,7 @@
-from rest_framework.generics import (
-    CreateAPIView,
-    DestroyAPIView,
-    RetrieveAPIView,
-    UpdateAPIView,
-    ListAPIView,
-)
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.generics import (CreateAPIView, DestroyAPIView,
+                                     ListAPIView, RetrieveAPIView,
+                                     UpdateAPIView)
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from habit_tracker.models import Habit
 from habit_tracker.pagination import MyPagination
@@ -53,4 +49,3 @@ class PublicHabitListAPIView(ListAPIView):
     serializer_class = PublicHabitSerializer
     pagination_class = MyPagination
     queryset = Habit.objects.filter(is_public=True)
-
