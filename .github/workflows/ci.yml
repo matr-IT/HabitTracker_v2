@@ -146,7 +146,7 @@ jobs:
               image: postgres:15-alpine
               container_name: habit_tracker_db
               environment:
-                POSTGRES_DB: habit_tracker
+                POSTGRES_NAME: habit_tracker
                 POSTGRES_USER: habit_user
                 POSTGRES_PASSWORD: '${{ secrets.DB_PASSWORD }}'
               ports:
