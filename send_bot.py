@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-TOKEN = os.getenv("HabitTrakerRybM_bot")
+TOKEN = os.getenv("HabitTrackerRybM_bot")
 CHAT_ID = os.getenv("CHAT_ID")
 
 
