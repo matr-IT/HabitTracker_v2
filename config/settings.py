@@ -182,4 +182,3 @@ CELERY_BEAT_SCHEDULE = {
         'schedule': 60.0,  # Запускать каждую минуту
     },
 }
-
