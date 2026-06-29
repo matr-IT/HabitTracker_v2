@@ -81,7 +81,7 @@ jobs:
           # Создаем .env файл
           cat > .env << 'EOF'
           DEBUG=False
-          SECRET_KEY='${{ secrets.SECRET_KEY }}'
+          SECRET_KEY_django='${{ secrets.SECRET_KEY }}'
           ALLOWED_HOSTS='${{ secrets.ALLOWED_HOSTS }}'
           TIME_ZONE=Europe/Moscow
           LANGUAGE_CODE=ru-ru
@@ -184,7 +184,7 @@ jobs:
                 - "8000"
               environment:
                 DEBUG: 'False'
-                SECRET_KEY: '${{ secrets.SECRET_KEY }}'
+                SECRET_KEY_django: '${{ secrets.SECRET_KEY }}'
                 ALLOWED_HOSTS: '${{ secrets.ALLOWED_HOSTS }}'
                 POSTGRES_NAME: habit_tracker
                 POSTGRES_USER: habit_user
@@ -227,7 +227,7 @@ jobs:
               command: celery -A config worker --loglevel=info
               environment:
                 DEBUG: 'False'
-                SECRET_KEY: '${{ secrets.SECRET_KEY }}'
+                SECRET_KEY_django: '${{ secrets.SECRET_KEY }}'
                 POSTGRES_NAME: habit_tracker
                 POSTGRES_USER: habit_user
                 POSTGRES_PASSWORD: '${{ secrets.DB_PASSWORD }}'
@@ -251,7 +251,7 @@ jobs:
               command: celery -A config beat --loglevel=info --scheduler django_celery_beat.schedulers:DatabaseScheduler
               environment:
                 DEBUG: 'False'
-                SECRET_KEY: '${{ secrets.SECRET_KEY }}'
+                SECRET_KEY_django: '${{ secrets.SECRET_KEY }}'
                 POSTGRES_NAME: habit_tracker
                 POSTGRES_USER: habit_user
                 POSTGRES_PASSWORD: '${{ secrets.DB_PASSWORD }}'

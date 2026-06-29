@@ -162,11 +162,10 @@ if CACHE_ENABLED:
     CACHE_MIDDLEWARE_KEY_PREFIX = "mms"
     REDIS_URL = f"redis://{REDIS_HOST}:6379/1"
 
-
-CELERY_BROKER_URL = f"redis://{REDIS_HOST}:6379"  # Например, Redis, который по умолчанию работает на порту 6379
+CELERY_BROKER_URL = REDIS_HOST  # Например, Redis, который по умолчанию работает на порту 6379
 
 # URL-адрес брокера результатов, также Redis
-CELERY_RESULT_BACKEND = f"redis://{REDIS_HOST}:6379"
+CELERY_RESULT_BACKEND = REDIS_HOST
 
 # Часовой пояс для работы Celery
 CELERY_TIMEZONE = "Europe/Moscow"
@@ -183,3 +182,4 @@ CELERY_BEAT_SCHEDULE = {
         'schedule': 60.0,  # Запускать каждую минуту
     },
 }
+
