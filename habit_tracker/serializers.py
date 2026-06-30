@@ -18,9 +18,7 @@ class HabitSerializer(ModelSerializer):
 
     def validate_time_to_complete(self, value):
         if not (1 <= value <= 120):
-            raise serializers.ValidationError(
-                "Время на выполнение должно быть от 1 до 120 секунд."
-            )
+            raise serializers.ValidationError("Время на выполнение должно быть от 1 до 120 секунд.")
         return value
 
     def validate_connected_habit(self, value):
@@ -31,9 +29,7 @@ class HabitSerializer(ModelSerializer):
         return value
 
     def validate_is_pleasant(self, value):
-        if value and (
-            self.initial_data.get("reward") or self.initial_data.get("connected_habit")
-        ):
+        if value and (self.initial_data.get("reward") or self.initial_data.get("connected_habit")):
             raise serializers.ValidationError(
                 "У приятной привычки не может быть вознаграждения или связанной привычки."
             )
@@ -41,9 +37,7 @@ class HabitSerializer(ModelSerializer):
 
     def validate_periodicity(self, value):
         if value < 1 or value > 7:
-            raise serializers.ValidationError(
-                "Периодичность должна быть от 1 до 7 раз в неделю."
-            )
+            raise serializers.ValidationError("Периодичность должна быть от 1 до 7 раз в неделю.")
         return value
 
 

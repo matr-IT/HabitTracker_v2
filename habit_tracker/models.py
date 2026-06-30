@@ -59,4 +59,3 @@ class Habit(models.Model):
 
     class Meta:
         ordering = ["id"]
-
