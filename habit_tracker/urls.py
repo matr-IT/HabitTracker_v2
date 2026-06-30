@@ -3,10 +3,10 @@ from django.urls import path
 from habit_tracker.apps import HabitTrackerConfig
 from habit_tracker.views import (
     HabitCreateAPIView,
-    HabitRetrieveAPIView,
-    HabitUpdateAPIView,
     HabitDestroyAPIView,
     HabitListAPIView,
+    HabitRetrieveAPIView,
+    HabitUpdateAPIView,
     PublicHabitListAPIView,
 )
 

@@ -333,8 +333,89 @@ docker-compose logs redis
 docker-compose -f docker-compose.prod.yml up -d
 ```
 
+### CI/CD (GitHub Actions) — пример
+
+Необходимо созлать в репозитории GitHub секреты для деплоя:
+- ALLOWED_HOSTS
+- DB_PASSWORD
+- DOCKER_TOKEN
+- DOCKER_USERNAME
+- SECRET_KEY
+- SERVER_HOST
+- SERVER_USER
+- SSH_PRIVATE_KEY
+- TELEGRAM_BOT_TOKEN
+
+Рекомендуется автоматизировать сборку образа, публикацию в реестр и деплой на сервер. Настройте секреты репозитория: DOCKER_REGISTRY (например ghcr.io или docker.io), DOCKER_USERNAME, DOCKER_PASSWORD, SSH_HOST, SSH_USER, SSH_PORT (опционально), SSH_PRIVATE_KEY, DEPLOY_PATH.
+
+Пример workflow (упакуйте в .github/workflows/ci-cd.yml):
+
+```yaml
+name: CI/CD
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Login to registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ secrets.DOCKER_REGISTRY }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKER_REGISTRY }}/habittracker:${{ github.sha }}
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install SSH key
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Remote deploy via SSH
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${DEPLOY_PATH:-/srv/habittracker} && docker-compose pull && docker-compose -f docker-compose.prod.yml up -d --remove-orphans"
+```
+
+Настройки:
+- DEPLOY_PATH можно хранить как секрет или использовать значение по умолчанию на сервере.
+- Проверить, что сервер имеет доступ к реестру (docker login) или используйте docker compose с переменными окружения для авторизации.
+
+### Деплой на сервер (ручной)
+1. Подготовьте сервер (Ubuntu пример):
+```bash
+# Установить Docker и docker-compose
+sudo apt update && sudo apt install -y docker.io docker-compose
+sudo systemctl enable --now docker
+```
+2. Скопируйте файлы на сервер (rsync или git clone) и настройте `.env.prod`.
+3. Запустите:
+```bash
+docker-compose -f docker-compose.prod.yml pull
+docker-compose -f docker-compose.prod.yml up -d --remove-orphans
+```
+4. Мониторинг и логи:
+```bash
+docker-compose -f docker-compose.prod.yml logs -f web
+```
+
 ### Используя Kubernetes
-Добавьте YAML конфигурации для развертывания в Kubernetes.
+Добавьте YAML конфигурации для развертывания в Kubernetes (Deployment, Service, Ingress, Secret для доступа к регистру).
 
 ## 📝 Логирование
 

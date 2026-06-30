@@ -1,11 +1,8 @@
-from celery import shared_task
-
-
+import os
 from datetime import datetime
 
 import requests
-import os
-
+from celery import shared_task
 from dotenv import load_dotenv
 
 from habit_tracker.models import Habit
@@ -14,16 +11,18 @@ load_dotenv()
 
 TOKEN = os.getenv("HabitTrakerRybM_bot")
 
+
 def send_message(text, user_chat_id):
     url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
     payload = {
         "chat_id": user_chat_id,
         "text": text,
-        "parse_mode": "Markdown"  # Allows basic text formatting like *bold*
+        "parse_mode": "Markdown",  # Allows basic text formatting like *bold*
     }
 
     response = requests.post(url, json=payload)
     return response.json()
+
 
 @shared_task()
 def send_msg():
@@ -36,5 +35,3 @@ def send_msg():
         time = habit.time
         msg = f"Приветствую! Пора развивать привычку: {action} в {place} в {time}"
         send_message(msg, owner_chat_id)
-
-

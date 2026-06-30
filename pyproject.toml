@@ -6,7 +6,7 @@ authors = [
     {name = "rybin",email = "rybin.32@gmail.com"}
 ]
 readme = "README.md"
-requires-python = ">=3.13,<4.0"
+requires-python = ">=3.13"
 dependencies = [
     "django (>=6.0.6,<7.0.0)",
     "psycopg2-binary (>=2.9.12,<3.0.0)",
@@ -21,10 +21,32 @@ dependencies = [
     "coverage (>=7.14.2,<8.0.0)",
     "celery (>=5.6.3,<6.0.0)",
     "requests (>=2.34.2,<3.0.0)",
-    "django-celery-beat (>=2.9.0,<3.0.0)"
+    "black (>=26.5.1,<27.0.0)",
+    "flake8 (>=7.3.0,<8.0.0)",
+    "isort (>=8.0.1,<9.0.0)"
 ]
 
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 119
+skip-string-normalization = true
+target-version = ["py311"]
+include = '\.pyi?$'
+exclude = '''
+/(
+\.git
+| \.hg
+| \.mypy_cache
+| \.tox
+| \.venv
+| venv
+| _build
+| buck-out
+| build
+| dist
+)/
+'''
